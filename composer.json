@@ -1,0 +1,12 @@
+{
+    "name": "misisipy/php-sdk",
+    "description": "A PHP SDK for the Misisipy ERP API.",
+    "license": "MIT",
+    "require": {
+        "rmccue/requests": ">=1.0"
+    },
+    "autoload": {
+        "psr-0": {"Misisipy": "src/"}
+    }
+}
+
