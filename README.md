@@ -50,7 +50,6 @@ var_dump($access_info);
 //  'expiration_date_time' => int '12312311' (Unix Timestamp) 
 //  'access_token' => string 'a2b544abbba560688a6ee7815926bd02dfc8d7bd784e2e016b422ebbbaa222',
 //  'refresh_token' => string '560688a6ee7815926bd02dfc8d7bd784'
-//  'scope' => string 'admin:invoices '
 ```
 
 Keep in mind that future visits to your app will not go through the Redirect URI, so you should store the access info and check the expiration of token before call the API.
@@ -66,7 +65,6 @@ var_dump($access_info);
 //  'expiration_date_time' => int '12312311' (Unix Timestamp) 
 //  'access_token' => string 'a2b544abbba560688a6ee7815926bd02dfc8d7bd784e2e016b422ebbbaa222',
 //  'refresh_token' => string '560688a6ee7815926bd02dfc8d7bd784'
-//  'scope' => string 'admin:invoices '
 ```
 
 
@@ -105,26 +103,18 @@ var_dump($response->headers['X-Total-Count']);
 //string '48' (length=2)
 ```
 
-For convenience, the `X-Main-Language` header can be obtained from `$response->main_language`:
-
-```php
-$response = $api->get("products/get/id/123456");
-$language = $response->main_language;
-var_dump($response->body->name->$language);
-```
-
 Other examples:
 
 ```php
 //Create a product
-$response = $api->post("products/create", [
-    'name' => 'Tienda Nube',
+$response = $api->post("products", [
+    'name' => 'Snowboard',
 ]);
 $product_id = $response->body->id;
 
 //Change its name
 $response = $api->put("products/$product_id", [
-    'name' => 'Nuvem Shop',
+    'name' => 'Snowboard',
 ]);
 
 //And delete it
@@ -157,7 +147,7 @@ try{
     $auth->request_access_token($code);
 } catch(Misisipy\Auth\Exception $e){
     var_dump($e->getMessage());
-    //string '[invalid_grant] The authorization code has expired' (length=50)
+    
 }
 ```
 

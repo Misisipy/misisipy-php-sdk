@@ -8,6 +8,7 @@ namespace Misisipy;
 class Auth {
     protected $client_id;
     protected $client_secret;
+    protected $redirect_uri;
     protected $auth_url;
     public $requests;
 
@@ -17,9 +18,10 @@ class Auth {
      * @param string $client_id The public client id of your app
      * @param string $client_secret The private client secret of your app
      */
-    public function __construct($client_id, $client_secret){
+    public function __construct($client_id, $client_secret,$redirect_uri){
         $this->client_id = $client_id;
         $this->client_secret = $client_secret;
+        $this->redirect_uri = $redirect_uri;
         $this->auth_url = "https://misisipy.auth0.com/oauth/token";
         $this->requests = new Requests;
     }
@@ -36,9 +38,11 @@ class Auth {
             'client_secret' => $this->client_secret,
             'code' => $code,
             'grant_type' => 'authorization_code',
+            'redirect_uri'=>$this->redirect_uri
         ];
         
         $response = $this->requests->post($this->auth_url, [], $params);
+        
         if (!$response->success){
             throw new Auth\Exception('Auth url returned with status code ' . $response->status_code);
         }
@@ -52,7 +56,8 @@ class Auth {
             'expires_in' => $body->expires_in,
             'expiration_date_time'=> time()+intval($body->expires_in),
             'access_token' => $body->access_token,
-            'scope' => $body->scope,
+            'refresh_token' => $body->refresh_token
+            
         ];
     }
 
@@ -89,6 +94,7 @@ class Auth {
             'client_secret' => $this->client_secret,
             'refresh_token' => $refresh_token,
             'grant_type' => 'refresh_token',
+            'redirect_uri'=>$this->redirect_uri
         ];
         
         $response = $this->requests->post($this->auth_url, [], $params);
@@ -105,7 +111,7 @@ class Auth {
             'expires_in' => $body->expires_in,
             'expiration_date_time'=> time()+$body->expires_in,
             'access_token' => $body->access_token,
-            'scope' => $body->scope,
+            'refresh_token' => $body->refresh_token
         ];
 
 

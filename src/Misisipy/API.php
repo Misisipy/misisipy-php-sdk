@@ -27,7 +27,9 @@ class API {
         $this->account_id = $account_id;
         $this->requests = new Requests;
         
-        $this->url = "https://api.misisipy.com/{$this->account_id}/";
+        $this->url = "https://api.misisipy.com/{$this->version}/{$this->account_id}/";
+
+
     }
     
     /**
@@ -84,23 +86,26 @@ class API {
     
     protected function _call($method, $path, $data = null){
         $headers = [
-            'Authentication' => "bearer {$this->access_token}",
-            'Content-Type' => 'application/json',
+            'authorization' => "Bearer {$this->access_token}",
+            'content-type' => 'application/json',
         ];
         
         $options = [
             'timeout' => 10,
             'useragent' => $this->user_agent,
         ];
-    
+
+        
         $response = $this->requests->request($this->url . $path, $headers, $data, $method, $options);
         $response = new API\Response($this, $response);
+        ;
+
         if ($response->status_code == 404){
             throw new API\NotFoundException($response);
         } elseif (!in_array($response->status_code, [200, 201])){
             throw new API\Exception($response);
         }
-        
+
         return $response;
     }
 }
