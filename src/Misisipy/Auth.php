@@ -2,7 +2,7 @@
 namespace Misisipy;
 
 /**
- * Provides a simple way to authenticate your app for the API of Tienda Nube/Nuvem Shop.
+ * Provides a simple way to authenticate your app for the API of Misisipy.
  * See https://github.com/Misisipy/api-docs for details.
  */
 class Auth {
